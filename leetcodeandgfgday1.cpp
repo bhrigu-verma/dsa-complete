@@ -30,3 +30,26 @@ class Solution {
         }return secondmaxi == -1 ? -1 : arr[secondmaxi]; 
     }
 };
+//2 qn - Maximum Sum Subarray of Size 3
+// Maximum Sum Subarray of Size 3   
+// Difficulty: EasyAccuracy: 50.0%Submissions: 100k+Points: 2
+// Given an array arr[] of size N, the task is to find the sum of the maximum sum subarray of size 3.
+class Solution {
+    public:
+    // Function returns the maximum sum
+    // of subarray of size 3
+    int maxSum(vector<int> &arr) {
+        int n = arr.size();
+
+        // If the array has less than 3 elements
+        if (n < 3) {
+            return -1;
+        }
+        int maxi = INT_MIN;
+        for (int i = 0; i < n - 2; i++) {
+            int sum = arr[i] + arr[i + 1] + arr[i + 2];
+            maxi = max(maxi, sum);
+        }
+        return maxi;
+    }
+};
