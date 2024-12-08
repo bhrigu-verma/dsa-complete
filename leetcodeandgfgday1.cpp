@@ -53,3 +53,24 @@ class Solution {
         return maxi;
     }
 };
+
+// 3 qn - Remove Duplicates from Sorted Array
+// Remove Duplicates from Sorted Array
+// Difficulty: EasyAccuracy: 40.0%Submissions: 100k+Points: 2
+class Solution {
+public:
+    int removeDuplicates(vector<int>& nums) {
+        int i =0;
+        int j;
+        for(int j =0;j<nums.size();j++){
+            if (nums[j]!=nums[i]){
+
+                nums[i+1]=nums[j];
+                i=i+1;
+                //swap and increase the i ka counter 
+            }
+           
+        } return i+1 ;// we need to return the size and its zero based indexing so return i +1
+
+    }
+};
