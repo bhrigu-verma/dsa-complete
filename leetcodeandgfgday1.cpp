@@ -74,3 +74,24 @@ public:
 
     }
 };
+
+// 4 qn - Two Sum
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+        int i; 
+        //find the size of array 
+        //compare each of the sum with the target 
+        //now the qn is how 
+        int n =nums.size();
+        for(int i=0;i<=n;i++){
+            for(int j=i+1;j<n;j++){
+                if (nums[i]+nums[j]==target){
+                    return {i, j};
+                }
+            }
+        }
+        return {};
+    }
+};
+
