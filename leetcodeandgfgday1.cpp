@@ -1,4 +1,9 @@
 // User function template for C++
+//qn -Second Largest
+// Difficulty: EasyAccuracy: 26.72%Submissions: 871K+Points: 2
+// Given an array of positive integers arr[], return the second largest element from the array. If the second largest element doesn't exist then return -1.
+
+// Note: The second largest element should not be equal to the largest element.
 class Solution {
   public:
     // Function returns the second
