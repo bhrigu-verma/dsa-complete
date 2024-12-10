@@ -94,4 +94,38 @@ public:
         return {};
     }
 };
+// change string to integer
 
+#include <iostream>
+#include <string>
+#include <climits>
+using namespace std;
+
+int myAtoi(string s) {
+    int i = 0; // Pointer to traverse the string
+    int n = s.size();
+    long result = 0; // Use long to detect overflow
+    int sign = 1; // Default sign is positive
+
+    // Step 1: Ignore leading whitespace
+    while (i < n && s[i] == ' ') i++;
+
+    // Step 2: Check for sign
+    if (i < n && (s[i] == '+' || s[i] == '-')) {
+        sign = (s[i] == '-') ? -1 : 1;
+        i++;
+    }
+
+    // Step 3: Parse digits and build the number
+    while (i < n && isdigit(s[i])) {
+        result = result * 10 + (s[i] - '0'); // Convert char to int
+        if (result * sign >= INT_MAX) return INT_MAX; // Handle overflow
+        if (result * sign <= INT_MIN) return INT_MIN; // Handle underflow
+        i++;
+    }
+
+    // Step 4: Return the final result
+    return static_cast<int>(result * sign);
+}
+
+//rotate array 
