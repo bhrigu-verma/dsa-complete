@@ -208,12 +208,12 @@ int main() {
 //Approach 2: Using Reversal Algorithm
 //This is a space-efficient solution with O(1) extra space. It works by reversing portions of the array to achieve the rotation.
 
-Algorithm:
-1. Reverse the first k elements of the array.
-2. Reverse the remaining n - k elements of the array.
-3. Reverse the entire array to obtain the final result.
-Implementation:
-Let's implement the above approach in code:
+// Algorithm:
+// 1. Reverse the first k elements of the array.
+// 2. Reverse the remaining n - k elements of the array.
+// 3. Reverse the entire array to obtain the final result.
+// Implementation:
+// Let's implement the above approach in code:
 cpp
 #include <iostream>
 using namespace std;
@@ -241,7 +241,6 @@ void rotateLeft(int arr[], int n, int k) {
     reverse(arr, 0, n - 1); // Reverse the entire array
 }
 
-// 
 
 
 
