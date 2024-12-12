@@ -623,7 +623,27 @@ int majorityElement(vector<int> v) {
 For competitive programming or real-world applications, **Moore’s Voting Algorithm** is the preferred solution due to its optimal time and space efficiency.
 
 
-// buy and sell stock problem
+// buy and sell stock problems
+
+//differenc in the three types of stock buya and sell program is below 
+// buy and sell stock 1 - you can buy and sell only once
+// buy and sell stock 2 - you can buy and sell multiple times
+// buy and sell stock 3 - you can buy and sell atmost 2 times
+// detailed difference in the 3 problems and solutions in short 
+// 1. Buy and Sell Stock I:
+//    - You can buy and sell the stock only once.
+//    - The goal is to maximize the profit.
+//    - The optimal approach is to find the minimum price to buy and the maximum price to sell.
+// 2. Buy and Sell Stock II:
+//    - You can buy and sell the stock multiple times.
+//    - The goal is to maximize the total profit.
+//    - The optimal approach is to capture every upward price movement.
+// 3. Buy and Sell Stock III:
+//    - You can buy and sell the stock at most two times.
+//    - The goal is to maximize the total profit.
+//    - The optimal approach is to divide the array into two parts and find the maximum profit for each part.
+
+// best time to buy and sell stock 1
 // 1. Brute Force Approach**
 //  Algorithm/Steps:
 // 1. Traverse the array using two nested loops:
@@ -747,3 +767,143 @@ int maxProfit(vector<int>& prices) {
 //   - Single pass through the array.
 // - **Space Complexity**: \( O(1) \)
 //   - Constant space used.
+
+// #### Insights:
+// - This approach leverages the fact that we can make multiple transactions.
+// - It focuses on capturing the profit from every upward price movement.
+//optimal approach
+// 3. Peak-Valley Approach**
+//  Algorithm/Steps:
+// 1. Initialize `i` to 0 and `n` to the length of the prices array.
+// 2. Traverse the array:
+//    - Find the first valley (i.e., the first element where the price is less than the next element).
+//    - Find the first peak (i.e., the first element where the price is greater than the next element).
+//    - Add the difference between the peak and valley to the total profit.
+//    - Update `i` to the peak index for the next iteration.
+// 3. Return the total profit.
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int maxProfit = 0;
+    int i = 0;
+
+    while (i < n - 1) {
+        // Find the first valley
+        while (i < n - 1 && prices[i] >= prices[i + 1]) {
+            i++;
+        }
+        int valley = prices[i];
+
+        // Find the first peak
+        while (i < n - 1 && prices[i] <= prices[i + 1]) {
+            i++;
+        }
+        int peak = prices[i];
+
+        // Add the difference to the total profit
+        maxProfit += peak - valley;
+    }
+
+    return maxProfit;
+}
+// #### Complexity:
+// - **Time Complexity**: \( O(N) \)
+//   - Single pass through the array.
+
+// - **Space Complexity**: \( O(1) \)
+//   - Constant space used.
+//best time to buy and sell stock 3
+//statement - You are given an array prices where prices[i] is the price of a given stock on the ith day.
+// Find the maximum profit you can achieve. You may complete at most two transactions.
+// Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+//example
+// Input: prices = [3,3,5,0,0,3,1,4]
+// Output: 6
+// Explanation: Buy on day 4 (price = 0) and sell on day 6 (price = 3), profit = 3-0 = 3.
+// Then buy on day 7 (price = 1) and sell on day 8 (price = 4), profit = 4-1 = 3.
+// Total profit is 3 + 3 = 6.
+// 1. Brute Force Approach**
+//  Algorithm/Steps:
+// 1. Traverse the array using three nested loops:
+//    - Outer loop selects the first buy day.
+//    - Middle loop selects the first sell day after the buy day.
+//    - Inner loop selects the second buy day after the first sell day.
+// 2. For each combination of buy and sell days, calculate the profit.
+// 3. Update the maximum profit if the current profit is greater.
+// 4. Return the maximum profit found.
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int maxProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            for (int k = j + 1; k < n; k++) {
+                int profit = prices[j] - prices[i] + prices[k] - prices[j];
+                if (profit > maxProfit) {
+                    maxProfit = profit;
+                }
+            }
+        }
+    }
+
+    return maxProfit;
+}
+
+// #### Complexity:
+// - **Time Complexity**: \( O(N^3) \)
+//   - Three nested loops traverse the array.
+// - **Space Complexity**: \( O(1) \)
+//   - No extra space used.
+
+// 2. Dynamic Programming Approach**
+//  Algorithm/Steps:
+// 1. Initialize four variables to track the minimum price for the first buy, the maximum profit after the first buy, the minimum price for the second buy, and the maximum profit after the second buy.
+// 2. Traverse the array:
+//    - Update the minimum price for the first buy and the maximum profit after the first buy.
+//    - Update the minimum price for the second buy and the maximum profit after the second buy.
+// 3. Return the maximum profit after the second buy.
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int firstBuy = INT_MAX, firstProfit = 0;
+    int secondBuy = INT_MAX, secondProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        firstBuy = min(firstBuy, prices[i]);
+        firstProfit = max(firstProfit, prices[i] - firstBuy);
+        secondBuy = min(secondBuy, prices[i] - firstProfit);
+        secondProfit = max(secondProfit, prices[i] - secondBuy);
+    }
+
+    return secondProfit;
+}
+// #### Complexity:
+// - **Time Complexity**: \( O(N) \)
+//   - Single pass through the array.
+// - **Space Complexity**: \( O(1) \)
+//   - Constant space used.
+
+// #### Insights:
+// - This approach uses dynamic programming to track the minimum price and maximum profit for each buy.
+// - It is more efficient than the brute force approach.
+
+//best approach
+// 3.peaks and valleys approach
+//  Algorithm/Steps:
+// 1. Initialize four variables to track the minimum price for the first buy, the maximum profit after the first buy, the minimum price for the second buy, and the maximum profit after the second buy.
+// 2. Traverse the array:
+//    - Update the minimum price for the first buy and the maximum profit after the first buy.
+//    - Update the minimum price for the second buy and the maximum profit after the second buy.
+// 3. Return the maximum profit after the second buy.
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int firstBuy = INT_MAX, firstProfit = 0;
+    int secondBuy = INT_MAX, secondProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        firstBuy = min(firstBuy, prices[i]);
+        firstProfit = max(firstProfit, prices[i] - firstBuy);
+        secondBuy = min(secondBuy, prices[i] - firstProfit);
+        secondProfit = max(secondProfit, prices[i] - secondBuy);
+    }
+
+    return secondProfit;
+}
