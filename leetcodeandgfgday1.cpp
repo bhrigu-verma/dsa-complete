@@ -129,6 +129,119 @@ int myAtoi(string s) {
 }
 
 //rotate array 
+//yhan pe 3 types of variations aati hai n one is ki roatte by 1 place other is roate right and left by
+// k places now here is the code for rotate by 1 place
+// Rotate Array by One Place
+// Difficulty: EasyAccuracy: 50.0%Submissions: 100k+Points: 2
+// Given an array arr[] of N elements. The task is to rotate the array by one place in the clock-wise direction.
+// Example 1:
+// Input:
+// N = 5
+// arr[] = {1, 2, 3, 4, 5}
+#include <iostream>
+using namespace std;
+
+void Rotatetoleft(int arr[], int n, int k) {
+    k = k % n;  // Handle cases where k >= n
+    int temp[k];
+
+    // Step 1: Store first k elements in temp
+    for (int i = 0; i < k; i++) {
+        temp[i] = arr[i];
+    }
+
+    // Step 2: Shift remaining elements to the left
+    for (int i = 0; i < n - k; i++) {
+        arr[i] = arr[i + k];
+    }
+
+    // Step 3: Place temp elements at the end
+    for (int i = n - k; i < n; i++) {
+        arr[i] = temp[i - n + k];
+    }
+}
+
+void Rotatetoright(int arr[], int n, int k) {
+    k = k % n;  // Handle cases where k >= n
+    int temp[k];
+
+    // Step 1: Store last k elements in temp
+    for (int i = n - k; i < n; i++) {
+        temp[i - n + k] = arr[i];
+    }
+
+    // Step 2: Shift remaining elements to the right
+    for (int i = n - k - 1; i >= 0; i--) {
+        arr[i + k] = arr[i];
+    }
+
+    // Step 3: Place temp elements at the start
+    for (int i = 0; i < k; i++) {
+        arr[i] = temp[i];
+    }
+}
+
+int main() {
+    int arr[] = {1, 2, 3, 4, 5, 6, 7};
+    int n = 7, k = 2;
+
+    // Test right rotation
+    Rotatetoright(arr, n, k);
+    cout << "After Rotating the elements to right: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+
+    // Reset array for left rotation test
+    int arr2[] = {1, 2, 3, 4, 5, 6, 7};
+
+    // Test left rotation
+    Rotatetoleft(arr2, n, k);
+    cout << "After Rotating the elements to left: ";
+    for (int i = 0; i < n; i++) {
+        cout << arr2[i] << " ";
+    }
+    return 0;
+}
+//2nd method - better n optimal approach
+//Approach 2: Using Reversal Algorithm
+//This is a space-efficient solution with O(1) extra space. It works by reversing portions of the array to achieve the rotation.
+
+Algorithm:
+1. Reverse the first k elements of the array.
+2. Reverse the remaining n - k elements of the array.
+3. Reverse the entire array to obtain the final result.
+Implementation:
+Let's implement the above approach in code:
+cpp
+#include <iostream>
+using namespace std;
+// Function to reverse the array from index start to end
+void reverse(int arr[], int start, int end) {
+    while (start < end) {
+        swap(arr[start], arr[end]);
+        start++;
+        end--;
+    }
+}
+// Function to rotate the array to the right by k places
+void rotateRight(int arr[], int n, int k) {
+    k = k % n; // Handle cases where k >= n
+    reverse(arr, 0, n - k - 1); // Reverse the first n - k elements
+    reverse(arr, n - k, n - 1); // Reverse the remaining k elements
+    reverse(arr, 0, n - 1); // Reverse the entire array
+}
+//function to rotate left
+
+void rotateLeft(int arr[], int n, int k) {
+    k = k % n; // Handle cases where k >= n
+    reverse(arr, 0, k - 1); // Reverse the first k elements
+    reverse(arr, k, n - 1); // Reverse the remaining n - k elements
+    reverse(arr, 0, n - 1); // Reverse the entire array
+}
+
+// 
 
 
 
