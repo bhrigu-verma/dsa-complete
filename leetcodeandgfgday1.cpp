@@ -129,3 +129,45 @@ int myAtoi(string s) {
 }
 
 //rotate array 
+
+
+
+//2 sum problem 
+
+// Certainly! Let's break down the implementation and provide a detailed explanation of how the code works:
+
+// Problem Statement
+// Given an array arr of integers of size n and an integer target, determine if there exist two distinct elements in the array such that t
+// heir sum equals target. If such a pair exists, return "YES"; otherwise, return "NO".
+// Create an unordered map mpp to store the numbers seen so far in the array and their corresponding indices. This helps in efficiently checking for the complement of a number in constant time, on average.
+// Iterate Through the Array:
+
+// For each element num in the array:
+// Compute moreNeeded = target - num, which is the value required to reach the target sum with num.
+// Check if moreNeeded exists in the unordered map mpp.
+// If it exists, it means a previous number moreNeeded and the current number num together add up to the target. Therefore, return "YES".
+// If moreNeeded is not found, store the current number num in mpp with its index as the value. This allows us to efficiently check for its complement in subsequent iterations.
+// Return "NO" if No Pair Found:
+
+// If the loop completes and no valid pair is found, return "NO".
+// Time Complexity Analysis
+// The time complexity of this solution is O(n), where n is the size of the input array arr. This is because we iterate through the array once and perform constant-time operations for each element.
+string twoSum(int n, vector<int> &arr, int target) {
+    unordered_map<int, int> mpp; // Hash map to store array elements and their indices
+
+    for (int i = 0; i < n; i++) {
+        int num = arr[i];          // Current number in the array
+        int moreNeeded = target - num; // Complement needed to reach the target
+
+        // Check if the complement exists in the hash map
+        if (mpp.find(moreNeeded) != mpp.end()) {
+            return "YES"; // Pair found, return "YES"
+        }
+
+        // Otherwise, add the current number to the hash map
+        mpp[num] = i;
+    }
+
+    // If no pair is found, return "NO"
+    return "NO";
+}
