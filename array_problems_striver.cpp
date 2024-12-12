@@ -702,4 +702,48 @@ int maxProfit(vector<int>& prices) {
 // 3. Update the maximum profit if the current profit is greater.
 // 4. Return the maximum profit found.
 
-    
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int maxProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int profit = prices[j] - prices[i];
+            if (profit > 0) {
+                maxProfit += profit;
+            }
+        }
+    }
+
+    return maxProfit;
+}
+
+// #### Complexity:
+// - **Time Complexity**: \( O(N^2) \)
+//   - Nested loops traverse the array.
+// - **Space Complexity**: \( O(1) \)
+//   - No extra space used.
+
+// 2. Single Pass Approach**
+//  Algorithm/Steps:
+// 1. Traverse the array:
+//    - If the current price is greater than the previous price, add the difference to the total profit.
+// 2. Return the total profit.
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int maxProfit = 0;
+
+    for (int i = 1; i < n; i++) {
+        if (prices[i] > prices[i - 1]) {
+            maxProfit += prices[i] - prices[i - 1];
+        }
+    }
+
+    return maxProfit;
+}
+
+// #### Complexity:
+// - **Time Complexity**: \( O(N) \)
+//   - Single pass through the array.
+// - **Space Complexity**: \( O(1) \)
+//   - Constant space used.
