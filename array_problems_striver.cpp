@@ -214,7 +214,7 @@ int main() {
 // 3. Reverse the entire array to obtain the final result.
 // Implementation:
 // Let's implement the above approach in code:
-cpp
+//cpp
 #include <iostream>
 using namespace std;
 // Function to reverse the array from index start to end
@@ -283,3 +283,147 @@ string twoSum(int n, vector<int> &arr, int target) {
     // If no pair is found, return "NO"
     return "NO";
 }
+
+
+
+//Find the Majority Element that occurs more than N/2 times
+
+//brute force
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int majorityElement(vector<int> v) {
+
+    //size of the given array:
+    int n = v.size();
+
+    for (int i = 0; i < n; i++) {
+        //selected element is v[i]
+        int cnt = 0;
+        for (int j = 0; j < n; j++) {
+            // counting the frequency of v[i]
+            if (v[j] == v[i]) {
+                cnt++;
+            }
+        }
+
+        // check if frquency is greater than n/2:
+        if (cnt > (n / 2))
+            return v[i];
+    }
+
+    return -1;
+}
+
+int main()
+{
+    vector<int> arr = {2, 2, 1, 1, 1, 2, 2};
+    int ans = majorityElement(arr);
+    cout << "The majority element is: " << ans << endl;
+    return 0;
+}
+
+
+//Optimal Approach
+//The brute force approach has a time complexity of O(n^2) due to the nested loops. We can optimize this
+// by using the Boyer-Moore Voting Algorithm, which has a time complexity of O(n) and constant space complexity.
+// The algorithm works by maintaining a candidate majority element and a count of its occurrences.
+// If the current element is the same as the candidate, we increment the count; otherwise, we decrement the count.
+// If the count becomes zero, we update the candidate to the current element and reset the count to 1.
+// After traversing the array, the candidate will be the majority element.
+// We perform a second pass to verify if the candidate occurs more than n/2 times.
+// If it does, we return the candidate; otherwise, we return -1.
+// Let's implement this optimized approach in code:
+
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+int majorityElement(vector<int> v) {
+
+    //size of the given array:
+    int n = v.size();
+
+    //declaring a map:
+    map<int, int> mpp;
+
+    //storing the elements with its occurnce:
+    for (int i = 0; i < n; i++) {
+        mpp[v[i]]++;
+    }
+
+    //searching for the majority element:
+    for (auto it : mpp) {
+        if (it.second > (n / 2)) {
+            return it.first;
+        }
+    }
+
+    return -1;
+}
+
+int main()
+{
+    vector<int> arr = {2, 2, 1, 1, 1, 2, 2};
+    int ans = majorityElement(arr);
+    cout << "The majority element is: " << ans << endl;
+    return 0;
+}
+
+
+
+//Kadane's Algorithm : Maximum Subarray Sum in an Array
+//The Kadane's algorithm is a dynamic programming technique used to find the maximum subarray sum in an array.
+// It works by maintaining two variables: maxSum and currentSum. The maxSum variable stores the maximum subarray sum found so far,
+// while the currentSum variable stores the sum of the current subarray being considered.
+// The algorithm iterates through the array, updating the currentSum by adding the current element and resetting it to zero if it becomes negative.
+// At each step, it compares the currentSum with the maxSum and updates the maxSum if the currentSum is greater.
+// The final maxSum value represents the maximum subarray sum in the array.
+// Let's implement the Kadane's algorithm in code:
+//The intuition of the algorithm is not to consider the subarray as a part of the answer if its sum is less than 0. A subarray 
+//with a sum less than 0 will always reduce our answer and so this type of subarray cannot be a part of the subarray with maximum sum.
+
+
+#include <bits/stdc++.h>
+using namespace std;
+
+long long maxSubarraySum(int arr[], int n) {
+    long long maxi = LONG_MIN; // maximum sum
+    long long sum = 0;
+
+    for (int i = 0; i < n; i++) {
+
+        sum += arr[i];
+
+        if (sum > maxi) {
+            maxi = sum;
+        }
+
+        // If sum < 0: discard the sum calculated
+        if (sum < 0) {
+            sum = 0;
+        }
+    }
+
+    // To consider the sum of the empty subarray
+    // uncomment the following check:
+
+    //if (maxi < 0) maxi = 0;
+
+    return maxi;
+}
+
+int main()
+{
+    int arr[] = { -2, 1, -3, 4, -1, 2, 1, -5, 4};
+    int n = sizeof(arr) / sizeof(arr[0]);
+    long long maxSum = maxSubarraySum(arr, n);
+    cout << "The maximum subarray sum is: " << maxSum << endl;
+    return 0;
+}
+
+
