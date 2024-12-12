@@ -427,3 +427,279 @@ int main()
 }
 
 
+//majority element greater than n/2 ki occurence
+
+
+// 1. Brute Force Approach**
+//  Algorithm/Steps:
+// 1. Traverse the array using two nested loops:
+//    - Outer loop selects an element.
+//    - Inner loop counts the frequency of the selected element.
+// 2. For each element, check if its frequency is greater than \( N/2 \).
+// 3. If found, return the element.
+// 4. If no majority element is found, return -1.
+
+int majorityElement(vector<int> v) {
+    int n = v.size();
+    for (int i = 0; i < n; i++) {
+        int count = 0;
+        for (int j = 0; j < n; j++) {
+            if (v[j] == v[i]) {
+                count++;
+            }
+        }
+        if (count > n / 2) return v[i];
+    }
+    return -1;
+}
+
+// #### Complexity:
+// - **Time Complexity**: \( O(N^2) \)
+//   - Outer loop runs \( N \) times, and the inner loop also runs \( N \) times.
+// - Space Complexity: \( O(1) \) 
+  - No extra data structures are used.
+
+2. Using a Hash Map (Better Approach)**
+ Algorithm/Steps:
+1. Use a hash map (or frequency array) to count occurrences of each element.
+2. Traverse the array and update the hash map with counts.
+3. While updating, check if any element’s count exceeds \( N/2 \). If yes, return the element.
+
+int majorityElement(vector<int> v) {
+    int n = v.size();
+    map<int, int> freq;
+    for (int i = 0; i < n; i++) {
+        freq[v[i]]++;
+        if (freq[v[i]] > n / 2) return v[i];
+    }
+    return -1;
+}
+```
+
+#### Complexity:
+Time Complexity**: \( O(N) \) (with unordered_map) or \( O(N \log N) \) (with map).
+Hash map operations are \( O(1) \) on average, but insertion takes \( O(\log N) \) in worst cases.
+space Complexity**: \( O(N) \) 
+Space used by the hash map.
+
+ Insights:
+ This approach reduces time complexity by leveraging a data structure to store counts.
+ Suitable for most cases but uses extra memory.
+
+
+3. Sorting-Based Approach**
+ Algorithm/Steps:
+1. Sort the array.
+2. The majority element must be present at index \( N/2 \) (because it occurs more than \( N/2 \) times and dominates the sorted array).
+3. Return the element at \( N/2 \).
+
+
+int majorityElement(vector<int> v) {
+    sort(v.begin(), v.end());
+    return v[v.size() / 2];
+}
+```
+
+Time Complexity ( O(N \log N) \)
+Sorting the array dominates the runtime.
+Space Complexity: \( O(1) \) (if in-place sorting is used).
+
+#### Insights:
+- This approach doesn’t require extra memory (besides sorting).
+- While not optimal, it’s simple and leverages the properties of sorted arrays.
+
+---
+
+### **4. Moore’s Voting Algorithm (Optimal Approach)**
+#### Algorithm/Steps:
+1. **Candidate Selection**:
+   - Use a variable (`count`) to track balance and another (`element`) to store the potential majority element.
+   - Traverse the array:
+     - If `count` is 0, set the current element as the candidate (`element`) and reset `count` to 1.
+     - If the current element matches `element`, increment `count`.
+     - Otherwise, decrement `count`.
+2. **Verification**:
+   - Traverse the array again to count occurrences of `element`.
+   - Return `element` if its count exceeds \( N/2 \), otherwise return -1.
+
+#### Code:
+```cpp
+int majorityElement(vector<int> v) {
+    int n = v.size();
+    int count = 0, element;
+    for (int i = 0; i < n; i++) {
+        if (count == 0) {
+            element = v[i];
+            count = 1;
+        } else if (v[i] == element) {
+            count++;
+        } else {
+            count--;
+        }
+    }
+
+    // Verify if the candidate is the majority element
+    count = 0;
+    for (int i = 0; i < n; i++) {
+        if (v[i] == element) count++;
+    }
+    return (count > n / 2) ? element : -1;
+}
+```
+
+#### Complexity:
+- **Time Complexity**: \( O(N) \)
+  - Two traversals: one for candidate selection and another for verification.
+- **Space Complexity**: \( O(1) \)
+  - No extra data structures are used.
+
+#### Insights:
+- This is the most efficient solution.
+- It leverages the cancelation effect of non-majority elements.
+
+---
+
+### **5. Divide and Conquer Approach**
+#### Algorithm/Steps:
+1. Divide the array into two halves.
+2. Recursively find the majority element in each half.
+3. Merge the results:
+   - If both halves agree on the majority element, return it.
+   - Otherwise, count each candidate in the whole array and return the one with a count greater than \( N/2 \).
+
+#### Code:
+```cpp
+int countInRange(vector<int>& v, int num, int left, int right) {
+    int count = 0;
+    for (int i = left; i <= right; i++) {
+        if (v[i] == num) count++;
+    }
+    return count;
+}
+
+int majorityElementRec(vector<int>& v, int left, int right) {
+    if (left == right) return v[left];
+
+    int mid = left + (right - left) / 2;
+    int leftMajority = majorityElementRec(v, left, mid);
+    int rightMajority = majorityElementRec(v, mid + 1, right);
+
+    if (leftMajority == rightMajority) return leftMajority;
+
+    int leftCount = countInRange(v, leftMajority, left, right);
+    int rightCount = countInRange(v, rightMajority, left, right);
+
+    return (leftCount > rightCount) ? leftMajority : rightMajority;
+}
+
+int majorityElement(vector<int> v) {
+    return majorityElementRec(v, 0, v.size() - 1);
+}
+```
+
+#### Complexity:
+- **Time Complexity**: \( O(N \log N) \)
+  - Each recursive step divides the array in half, and merging takes \( O(N) \).
+- **Space Complexity**: \( O(\log N) \)
+  - Space used by recursion stack.
+
+#### Insights:
+- A divide-and-conquer approach, but less practical than Moore’s algorithm.
+
+---
+
+### Comparison of All Approaches:
+
+| Approach                 | Time Complexity       | Space Complexity | Notes                                                                 |
+|--------------------------|-----------------------|------------------|----------------------------------------------------------------------|
+| Brute Force              | \( O(N^2) \)          | \( O(1) \)       | Simple but inefficient for large arrays.                            |
+| Hash Map                 | \( O(N) \) or \( O(N \log N) \) | \( O(N) \)       | Efficient but uses extra space.                                     |
+| Sorting                  | \( O(N \log N) \)     | \( O(1) \)       | No extra space, but slower than optimal.                            |
+| Moore’s Voting Algorithm | \( O(N) \)            | \( O(1) \)       | Most efficient and widely used for this problem.                    |
+| Divide and Conquer       | \( O(N \log N) \)     | \( O(\log N) \)  | Useful as a learning approach but not practical.                    |
+
+---
+
+For competitive programming or real-world applications, **Moore’s Voting Algorithm** is the preferred solution due to its optimal time and space efficiency.
+
+
+// buy and sell stock problem
+// 1. Brute Force Approach**
+//  Algorithm/Steps:
+// 1. Traverse the array using two nested loops:
+//    - Outer loop selects a buy day.
+//    - Inner loop selects a sell day after the buy day.
+// 2. For each pair of buy and sell days, calculate the profit.
+// 3. Update the maximum profit if the current profit is greater.
+// 4. Return the maximum profit found.
+//code
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int maxProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int profit = prices[j] - prices[i];
+            if (profit > maxProfit) {
+                maxProfit = profit;
+            }
+        }
+    }
+
+    return maxProfit;
+}
+
+// #### Complexity:
+// - **Time Complexity**: \( O(N^2) \)
+//   - Nested loops traverse the array.
+// - **Space Complexity**: \( O(1) \)
+//   - No extra space used.
+//optimal approach
+// 2. Single Pass Approach**
+//  Algorithm/Steps:
+// 1. Initialize two variables: `minPrice` to track the minimum price seen so far and `maxProfit` to track the maximum profit.
+// 2. Traverse the array:
+//    - Update `minPrice` to the minimum of the current price and `minPrice`.
+//    - Update `maxProfit` to the maximum of the current profit and the difference between the current price and `minPrice`.
+// 3. Return `maxProfit`.
+//code
+int maxProfit(vector<int>& prices) {
+    int n = prices.size();
+    int minPrice = INT_MAX;
+    int maxProfit = 0;
+
+    for (int i = 0; i < n; i++) {
+        minPrice = min(minPrice, prices[i]);
+        maxProfit = max(maxProfit, prices[i] - minPrice);
+    }
+
+    return maxProfit;
+}
+// #### Complexity:
+// - **Time Complexity**: \( O(N) \)
+//   - Single pass through the array.
+// - **Space Complexity**: \( O(1) \)
+//   - Constant space used.
+// #### Insights:
+
+//best time to buy and sell stock 2
+//statement - You are given an array prices where prices[i] is the price of a given stock on the ith day.
+// Find the maximum profit you can achieve. You may complete as many transactions as you like (i.e., buy one and sell one share of the stock multiple times).
+// Note: You may not engage in multiple transactions simultaneously (i.e., you must sell the stock before you buy again).
+//example
+// Input: prices = [7,1,5,3,6,4]
+// Output: 7
+// Explanation: Buy on day 2 (price = 1) and sell on day 3 (price = 5), profit = 5-1 = 4.
+// Then buy on day 4 (price = 3) and sell on day 5 (price = 6), profit = 6-3 = 3.
+// Total profit is 4 + 3 = 7.
+
+// 1. Brute Force Approach**
+//  Algorithm/Steps:
+// 1. Traverse the array using two nested loops:
+//    - Outer loop selects a buy day.
+//    - Inner loop selects a sell day after the buy day.
+// 2. For each pair of buy and sell days, calculate the profit.
+// 3. Update the maximum profit if the current profit is greater.
+// 4. Return the maximum profit found.
+
+    
