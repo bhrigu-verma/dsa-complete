@@ -110,3 +110,45 @@ class Solution {
         // Your code here
     
 };
+
+
+
+// You have been given a sorted array/list 'arr' consisting of ‘n’ elements. You are also given an integer ‘k’.
+// Now the array is rotated at some pivot point unknown to you.
+int search(vector<int>& arr, int n, int k)
+{
+    int low = 0;
+    int high = n - 1;
+
+    while (low <= high) {
+        int mid = low + (high - low) / 2; // To avoid potential overflow
+
+        // If the target is found at the middle index
+        if (arr[mid] == k) 
+            return mid;
+
+        // Check if the right half is sorted
+        if (arr[mid] <= arr[high]) {
+            // If the target lies in the sorted right half
+            if (arr[mid] <= k && k <= arr[high]) {
+                low = mid + 1; // Narrow the search to the right half
+            } else {
+                high = mid - 1; // Target is not in the sorted half
+            }
+        }
+        // Else, the left half must be sorted
+        else {
+            // If the target lies in the sorted left half
+            if (arr[low] <= k && k <= arr[mid]) {
+                high = mid - 1; // Narrow the search to the left half
+            } else {
+                low = mid + 1; // Target is not in the sorted half
+            }
+        }
+    }
+
+    // If we exit the loop, the target was not found
+    return -1;
+}
+
+
